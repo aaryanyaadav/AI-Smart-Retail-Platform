@@ -276,8 +276,6 @@ sequenceDiagram
 │   └── intents.json            # Customer Knowledge Base & Intent Patterns
 ├── Data/                       # Datasets & Historical Data Files
 ├── Notebooks/                  # Machine Learning Training & Evaluation Notebooks
-├── Dockerfile                  # Production Multi-stage Containerization File
-├── docker-compose.yml          # Container Orchestration Configuration
 ├── requirements.txt            # Python Dependencies
 ├── .gitignore                  # Git Exclusion Definitions
 └── README.md                   # Platform Documentation
