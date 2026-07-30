@@ -426,3 +426,12 @@ All AI predictions and system interactions are logged into CSV files under `app/
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
+---
+
+## 👤 Author
+
+* **Aaryan Yadav**
+  * **GitHub**: [@aaryanyaadav](https://github.com/aaryanyaadav)
+  * **Repository**: [AI-Smart-Retail-Platform](https://github.com/aaryanyaadav/AI-Smart-Retail-Platform)
+
+
