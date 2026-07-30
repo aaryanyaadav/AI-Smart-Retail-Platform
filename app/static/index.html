@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Retail AI Platform - Analytics Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-store brand-icon"></i>
+                <div class="brand-text">
+                    <h2>SmartRetail</h2>
+                    <span>AI Intelligence Hub</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="javascript:void(0)" class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-line"></i> Analytics Dashboard
+                </a>
+                <a href="javascript:void(0)" class="nav-item" data-tab="vision">
+                    <i class="fa-solid fa-camera-retro"></i> Product Classifier
+                </a>
+                <a href="javascript:void(0)" class="nav-item" data-tab="face">
+                    <i class="fa-solid fa-user-check"></i> Face Loyalty Recognition
+                </a>
+                <a href="javascript:void(0)" class="nav-item" data-tab="sentiment">
+                    <i class="fa-solid fa-face-smile"></i> Sentiment Analyzer
+                </a>
+                <a href="javascript:void(0)" class="nav-item" data-tab="chatbot">
+                    <i class="fa-solid fa-comments"></i> AI Retail Chatbot
+                </a>
+            </nav>
+
+            <div class="system-status">
+                <div class="status-indicator online"></div>
+                <div class="status-info">
+                    <span class="status-title">FastAPI Backend</span>
+                    <span class="status-value" id="systemHealthText">Operational</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="page-title">
+                    <h1 id="tabTitle">Retail Analytics Dashboard</h1>
+                    <p id="tabSubtitle">Real-time store metrics, AI predictions, and customer intelligence</p>
+                </div>
+                <div class="header-actions">
+                    <button type="button" class="btn btn-primary" onclick="refreshDashboard()"><i class="fa-solid fa-rotate"></i> Refresh Stats</button>
+                </div>
+            </header>
+
+            <!-- Tab 1: Dashboard -->
+            <section id="tab-dashboard" class="tab-page active">
+                <div class="metrics-grid">
+                    <div class="metric-card clickable" onclick="openDetailModal('visitors', 'Today\'s Visitor Log Details')">
+                        <div class="metric-icon blue"><i class="fa-solid fa-users"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Today's Visitors <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; opacity:0.7;"></i></span>
+                            <h3 id="statTodayVisitors">--</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card clickable" onclick="openDetailModal('returning', 'Returning Customer Log Details')">
+                        <div class="metric-icon green"><i class="fa-solid fa-user-check"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Returning Customers <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; opacity:0.7;"></i></span>
+                            <h3 id="statReturningCustomers">--</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon purple"><i class="fa-solid fa-percent"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Returning Rate</span>
+                            <h3 id="statReturningRate">--%</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card clickable" onclick="openDetailModal('reviews', 'All Customer Feedback Reviews Log')">
+                        <div class="metric-icon orange"><i class="fa-solid fa-comments"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Total Reviews <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; opacity:0.7;"></i></span>
+                            <h3 id="statTotalReviews">--</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card clickable" onclick="openDetailModal('positive_reviews', 'Positive Feedback Reviews Log')">
+                        <div class="metric-icon green"><i class="fa-solid fa-thumbs-up"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Positive Reviews <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; opacity:0.7;"></i></span>
+                            <h3 id="statPositiveReviews">--</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon blue"><i class="fa-solid fa-chart-pie"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-label">Positive Sentiment Rate</span>
+                            <h3 id="statPositiveSentimentRate">--%</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-panels">
+                    <div class="panel clickable" onclick="openDetailModal('intent', 'Store Chatbot Query Intent History')">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-comments"></i> Top Intent Query <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; float:right; opacity:0.7;"></i></h3>
+                        </div>
+                        <div class="panel-body highlight-box">
+                            <span class="badge-intent" id="statMostAskedIntent">Loading...</span>
+                            <p>Most frequently asked customer question in store chatbot (Click to inspect log history)</p>
+                        </div>
+                    </div>
+
+                    <div class="panel clickable" onclick="openDetailModal('product', 'Product Image Classification History')">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-shirt"></i> Top Product Category <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; float:right; opacity:0.7;"></i></h3>
+                        </div>
+                        <div class="panel-body highlight-box">
+                            <span class="badge-product" id="statMostPredictedCategory">Loading...</span>
+                            <p>Most classified inventory item category (Click to inspect log history)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Product Classifier -->
+            <section id="tab-vision" class="tab-page">
+                <div class="interactive-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-camera"></i> Live Product Camera Scanner</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="camera-container">
+                                <video id="productWebcam" autoplay playsinline style="width:100%; max-height:220px; border-radius:8px; background:#0f172a; display:none;"></video>
+                                <canvas id="productCanvas" style="display:none;"></canvas>
+                                <div class="drop-zone" id="productDropZone">
+                                    <i class="fa-solid fa-video drop-icon"></i>
+                                    <p>Click <strong>Start Web Camera</strong> or Browse Image</p>
+                                    <input type="file" id="productImageInput" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="button-group mt-1">
+                                <button type="button" class="btn btn-primary" onclick="startProductCamera(event)"><i class="fa-solid fa-video"></i> Start Camera</button>
+                                <button type="button" class="btn btn-success" onclick="captureAndClassifyProduct(event)"><i class="fa-solid fa-circle-dot"></i> Scan Product</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-square-poll-vertical"></i> Product Recognition Result</h3>
+                        </div>
+                        <div class="panel-body" id="productResultsArea">
+                            <div class="empty-state">Start camera or upload product image to identify item category</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 3: Face Recognition -->
+            <section id="tab-face" class="tab-page">
+                <div class="interactive-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-user-gear"></i> Live Face Scanner & Registration</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="camera-container">
+                                <video id="faceWebcam" autoplay playsinline style="width:100%; max-height:220px; border-radius:8px; background:#0f172a; display:none;"></video>
+                                <canvas id="faceCanvas" style="display:none;"></canvas>
+                                <div class="drop-zone" id="faceDropZone">
+                                    <i class="fa-solid fa-id-badge drop-icon"></i>
+                                    <p>Click <strong>Start Face Camera</strong> or Browse Image</p>
+                                    <input type="file" id="faceImageInput" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="button-group mt-1">
+                                <button type="button" class="btn btn-primary" onclick="startFaceCamera(event)"><i class="fa-solid fa-video"></i> Start Camera</button>
+                                <button type="button" class="btn btn-success" onclick="captureAndRecognizeFace(event)"><i class="fa-solid fa-user-check"></i> Scan Face</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-id-card"></i> Customer Loyalty Match</h3>
+                        </div>
+                        <div class="panel-body" id="faceResultsArea">
+                            <div class="empty-state">Scan face to check customer name or register new member</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 4: Sentiment Analyzer -->
+            <section id="tab-sentiment" class="tab-page">
+                <div class="interactive-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-pen-to-square"></i> Customer Review Input</h3>
+                        </div>
+                        <div class="panel-body">
+                            <textarea id="sentimentTextInput" placeholder="Type or paste customer review here... e.g. 'The fitting of this dress is wonderful and fabric quality is top-notch!'" rows="5"></textarea>
+                            <button type="button" class="btn btn-block btn-accent mt-1" onclick="analyzeSentiment(event)"><i class="fa-solid fa-magnifying-glass-chart"></i> Analyze Review Sentiment</button>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Sentiment Classification</h3>
+                        </div>
+                        <div class="panel-body" id="sentimentResultsArea">
+                            <div class="empty-state">Enter customer review text to classify sentiment (Positive, Negative, Neutral)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 5: AI Retail Chatbot -->
+            <section id="tab-chatbot" class="tab-page">
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-bubble bot">
+                            <div class="message-content">
+                                Hello! 👋 Welcome to Smart Retail Customer Support. How can I assist you today with store hours, order tracking, or return policies?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-bar">
+                        <input type="text" id="chatInput" placeholder="Ask about store hours, return policy, tracking, etc..." autocomplete="off" onkeydown="handleChatKeyPress(event)">
+                        <button type="button" class="btn btn-primary" onclick="sendChatMessage(event)"><i class="fa-solid fa-paper-plane"></i> Send</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Log Inspection Modal -->
+    <div id="detailModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Log Records Detail</h3>
+                <button type="button" class="modal-close" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="empty-state">Loading log records...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
